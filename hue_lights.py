@@ -35,9 +35,9 @@ class hue_light:
         state = light_data['state']
         self.on = state['on']
         self.hue = state['hue']
-        self.colormode = state['colormode']
-        self.effect = state['effect']
-        self.alert = state['alert']
+        self.colormode = str(state['colormode'])
+        self.effect = str(state['effect'])
+        self.alert = str(state['alert'])
         self.xy = state['xy']
         self.reachable = state['reachable']
         self.bri = state['bri']
@@ -51,13 +51,14 @@ class hue_light:
 class bridge:
 
     def __init__(self, bridge_ip, username):
-        b = Bridge(bridge_ip, username)
+        self.b = Bridge(bridge_ip, username)
         num_lights = 0
-        raw_lights = b.lights
+
+        raw_lights = self.b.lights
         self.lights = []
 
         for i in range(1, len(raw_lights()) + 1):
-            raw_light = b.lights[i]()
+            raw_light = self.b.lights[i]()
             light = hue_light(raw_light,i)
             self.lights.append(light)
 
@@ -67,6 +68,21 @@ class bridge:
     def lights(self):
         return self.lights
 
-    
+    def lights_off(self):
+        for light in self.lights:
+            self.b.lights[light.num].state(on=False)
+
+    def lights_on(self):
+        for light in self.lights:
+            self.b.lights[light.num].state(on=True)
+
+    def colorloop(self, state):
+        if state:
+            eff = 'colorloop'
+        else:
+            eff = 'none'
+        for light in self.lights:
+            self.b.lights[light.num].state(effect=eff)
+
 
    # def set_light(self, ):

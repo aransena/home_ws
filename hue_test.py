@@ -13,10 +13,12 @@ for light in bridge.lights(refresh = False):#lights:
     print light.name, light.state
 
 bridge.lights_on()
-lights = bridge.lights()
-bridge.set_brightness(brightness=100)
+#lights = bridge.lights()
+bridge.set_saturation(25)
+#bridge.set_colour([200,180,90])
+bridge.set_brightness(brightness=255)
 
-print bridge.get_positions()
+#print bridge.get_positions()
 
 #bridge.lights_off()
 
